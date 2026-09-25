@@ -313,7 +313,14 @@ const App = () => {
     fetchSongs(); 
     // load liked songs from local storage
     const saved = localStorage.getItem('luno_liked');
-    if(saved) setLikedSongs(JSON.parse(saved));
+    if (saved) {
+      try {
+        const parsedLikes = JSON.parse(saved);
+        setLikedSongs(Array.isArray(parsedLikes) ? parsedLikes : []);
+      } catch {
+        localStorage.removeItem('luno_liked');
+      }
+    }
   }, []);
 
   const toggleLike = (id) => {
